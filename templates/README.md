@@ -32,17 +32,28 @@ After downloading, simply edit the HTML and CSS files included with the template
 
 ### Advanced Usage
 
-After installation, run `npm install` and then run `npm start` which will open up a preview of the template in your default browser, watch for changes to core template files, and live reload the browser when changes are saved. You can view the `gulpfile.js` to see which tasks are included with the dev environment.
-
-#### Gulp Tasks
-
-- `gulp` the default task that builds everything
-- `gulp watch` browserSync opens the project in your default browser and live reloads when changes are made
-- `gulp css` compiles SCSS files into CSS and minifies the compiled CSS
-- `gulp js` minifies the themes JS file
-- `gulp vendor` copies dependencies from node_modules to the vendor directory
-
-You must have npm installed globally in order to use this build environment.
+> **2026-08-19 變更：Gulp 建置工具鏈已移除。**
+>
+> 原本的 `package.json`、`package-lock.json`、`gulpfile.js`、`.travis.yml`、
+> `.browserslistrc` 已從本 repo 刪除，原因有二：
+>
+> 1. **已經無法運作。** 工具鏈鎖定 `node-sass@4.12.0`，該版本最高只支援
+>    Node 12；在現行 Node 環境下 `npm install` 會直接失敗，等於這套建置
+>    早已是死碼。
+> 2. **是全部資安警示的來源。** lockfile 共 529 個套件，其中 524 個是
+>    `dev` 相依（gulp 4 / node-sass 4 / browser-sync 2.26 等 2019 年版本），
+>    GitHub Dependabot 因此回報 95 個漏洞。這些套件從未出貨到瀏覽器，
+>    卻讓真正需要注意的前台問題被淹沒。
+>
+> **網站運作不受影響。** 前台載入的是已編譯好的 `css/creative.min.css`、
+> `js/creative.min.js` 與 `vendor/` 下的資產（見 `theme.tpl`），與 Node
+> 建置無關。
+>
+> **若日後需要重新編譯 `scss/`：** `scss/` 原始檔仍保留在 repo 中。建議
+> 改用現行的 Dart Sass CLI，例如
+> `npx sass scss/creative.scss css/creative.css --style=compressed`，
+> 不要復原舊工具鏈。舊檔案若真的需要，可從 git 歷史取回
+> （`git show <本次 commit>^:templates/gulpfile.js`）。
 
 ## Bugs and Issues
 
